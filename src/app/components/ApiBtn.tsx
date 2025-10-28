@@ -17,7 +17,18 @@ export default function ApiBtn({btnEtxt, btnStat, onBtnClicked} : ApiBtnProps) {
       </div>
       <div className="flex-1 py-1 px-1 text-xl">
         <div className="border rounded-lg px-1 w-full h-full flex items-center justify-center">
-          <p className="text-green-500 font-bold">{btnStat}</p>
+          {
+            btnStat === "Waiting" && <p className="text-yellow-500 font-bold">{btnStat}</p>
+          } 
+          {
+            btnStat === "Loading" && <p className="text-orange-500 font-bold">{btnStat}</p>
+          } 
+          {
+            btnStat === "Success" && <p className="text-green-500 font-bold">{btnStat}</p>
+          }
+          {
+            btnStat === "Failed" && <p className="text-red-500 font-bold">{btnStat}</p>
+          }    
         </div>
       </div>
     </div>
