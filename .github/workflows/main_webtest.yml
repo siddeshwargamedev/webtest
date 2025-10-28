@@ -50,13 +50,13 @@ jobs:
             zip $ZIP_FILE_NAME ./* .next -qr
 
             az webapp deploy `
-                --resource-group $RESOURCE_GROUP_NAME `
-                --name $WEB_APP_NAME `
+                --resource-group $env:RESOURCE_GROUP_NAME `
+                --name $env:WEB_APP_NAME `
                 --src-path $ZIP_FILE_NAME `
                 --slot staging `
                 --type zip `
                 --clean true 
         env:
-            FILE_NAME: "anyname"
-            RESOURCE_GROUP_NAME: "endpt_rg"
-            WEB_APP_NAME: "webtest"
+            FILE_NAME: anyname
+            RESOURCE_GROUP_NAME: endpt_rg
+            WEB_APP_NAME: webtest
