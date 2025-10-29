@@ -20,6 +20,8 @@ export default function Home() {
   const [fetch_div, setFetchDiv] = useState(false);
   const [divData, setDivData] = useState(null);
 
+  const [ntfData, setNftData] = useState(null);
+
   // const { data, error, isLoading } = useSWR(
   //   shouldFetch ? "http://localhost:3002/hello" : null, // only call API if shouldFetch is true
   //   fetcher
@@ -55,23 +57,34 @@ export default function Home() {
 
   useEffect(() => {
     if (fetch_div) {
-      fetch("https://webend-fxbnc4dwd3eeemcn.centralindia-01.azurewebsites.net/div")
+      fetch("https://webend-fxbnc4dwd3eeemcn.centralindia-01.azurewebsites.net/throw")
         .then((res) => res.json())
         .then((data) => {
           setDivData(data);
           setResData(data);
         })
         .catch((err) => {
-          setResData({ msg: err.message });
+          setResData({ msg: "5xx error" });
           setDivData(err);
         });
     }
     setFetchDiv(false);
   }, [fetch_div]);
 
+  const triggerNotFoundError = async () => {
+    try {
+      const res = await fetch(`https://webend-fxbnc4dwd3eeemcn.centralindia-01.azurewebsites.net/notfound`);  
+      const data = await res.json();
+      setNftData(data);
+      setResData({ msg: "4xx error" });
+    } catch (err) {
+      console.error("Caught error:", err);
+    }
+  };
+
   return (
     <div className="w-screen h-screen flex justify-center items-center">
-      <div className="w-[500px] h-96 border-2 rounded-2xl shadow-2xl p-3 flex flex-col">
+      <div className="w-[500px] border-2 rounded-2xl shadow-2xl p-3 flex flex-col">
         <div className="w-full flex">
           <div className="flex-1 p-1">
             <div className="text-blue-500 text-center text-xl font-bold py-2 px-4 rounded-lg w-full">
@@ -95,9 +108,14 @@ export default function Home() {
           onBtnClicked={() => setFetch_svTime(true)}
         />
         <ApiBtn
-          btnEtxt="/div"
+          btnEtxt="/throw"
           btnStat={divData == null ? "Waiting" : "Failed"}
           onBtnClicked={() => setFetchDiv(true)}
+        />
+        <ApiBtn
+          btnEtxt="/notfound"
+          btnStat={ntfData == null ? "Waiting" : "Failed"}
+          onBtnClicked={() => triggerNotFoundError()}
         />
         <div className=" h-24 border rounded-lg mt-1 mx-1 text-center pt-1">
           {resData == null ? "" : JSON.stringify(resData, null, 2)}
